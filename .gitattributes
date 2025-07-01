@@ -1,1 +1,2 @@
 .mp4 filter=lfs diff=lfs merge=lfs -text
+openmp_heat_diffusion/data_analysis/isotropic/output/output_heat_diffusion_a.txt filter=lfs diff=lfs merge=lfs -text
