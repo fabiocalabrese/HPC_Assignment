@@ -1,0 +1,3 @@
+C:/Users/fabio/OneDrive/Desktop/HPC/project/cuda/parallel/times_different_blocks/speedup_computation/cmake-build-debug/CMakeFiles/speedup.dir
+C:/Users/fabio/OneDrive/Desktop/HPC/project/cuda/parallel/times_different_blocks/speedup_computation/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/fabio/OneDrive/Desktop/HPC/project/cuda/parallel/times_different_blocks/speedup_computation/cmake-build-debug/CMakeFiles/rebuild_cache.dir

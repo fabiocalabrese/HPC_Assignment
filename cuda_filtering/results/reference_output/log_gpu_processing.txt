@@ -1,0 +1,8 @@
+Image: climate_change.jpg, Threads: 13450752, GPU: Orin, Global Mem: 62796 MB, Blue Time: 2.41 ms, Green Time: 1.80 ms, Red Time: 1.80 ms, Total Time: 6.02 ms
+Image: forests_cloudy_sky.jpg, Threads: 18529280, GPU: Orin, Global Mem: 62796 MB, Blue Time: 3.83 ms, Green Time: 3.14 ms, Red Time: 3.13 ms, Total Time: 10.11 ms
+Image: harbor_bay_sunset.jpg, Threads: 15168256, GPU: Orin, Global Mem: 62796 MB, Blue Time: 1.36 ms, Green Time: 0.99 ms, Red Time: 1.00 ms, Total Time: 3.34 ms
+Image: heart_shaped_island.jpg, Threads: 42752000, GPU: Orin, Global Mem: 62796 MB, Blue Time: 3.10 ms, Green Time: 2.72 ms, Red Time: 2.72 ms, Total Time: 8.54 ms
+Image: Lake_forest.jpg, Threads: 22056960, GPU: Orin, Global Mem: 62796 MB, Blue Time: 1.75 ms, Green Time: 1.38 ms, Red Time: 1.37 ms, Total Time: 4.49 ms
+Image: pexels-christian-heitz.jpg, Threads: 319389696, GPU: Orin, Global Mem: 62796 MB, Blue Time: 42.92 ms, Green Time: 42.35 ms, Red Time: 42.54 ms, Total Time: 127.81 ms
+Image: Planet_earth.jpg, Threads: 37340160, GPU: Orin, Global Mem: 62796 MB, Blue Time: 6.82 ms, Green Time: 6.11 ms, Red Time: 6.09 ms, Total Time: 19.02 ms
+Image: Winding_road.jpg, Threads: 8294400, GPU: Orin, Global Mem: 62796 MB, Blue Time: 0.90 ms, Green Time: 0.54 ms, Red Time: 0.54 ms, Total Time: 1.99 ms

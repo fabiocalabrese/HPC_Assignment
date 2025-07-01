@@ -1,0 +1,7 @@
+Image: climate_changeN90.jpg, Block: 32x32, Threads: 13521920, Blue Time: 3.96 ms, Green Time: 3.39 ms, Red Time: 3.38 ms, Total Time: 10.72 ms
+Image: forests_cloudy_skyN90.jpg, Block: 32x32, Threads: 18585600, Blue Time: 2.29 ms, Green Time: 1.92 ms, Red Time: 1.92 ms, Total Time: 6.13 ms
+Image: harbor_bay_sunsetN90.jpg, Block: 32x32, Threads: 15296512, Blue Time: 1.97 ms, Green Time: 1.58 ms, Red Time: 1.58 ms, Total Time: 5.13 ms
+Image: heart_shaped_islandN90.jpg, Block: 32x32, Threads: 42752000, Blue Time: 14.39 ms, Green Time: 13.73 ms, Red Time: 13.73 ms, Total Time: 41.85 ms
+Image: Lake_forestN90.jpg, Block: 32x32, Threads: 22118400, Blue Time: 4.68 ms, Green Time: 4.65 ms, Red Time: 4.65 ms, Total Time: 13.98 ms
+Image: Planet_earthN90.jpg, Block: 32x32, Threads: 37340160, Blue Time: 12.67 ms, Green Time: 11.99 ms, Red Time: 11.99 ms, Total Time: 36.65 ms
+Image: Winding_roadN90.jpg, Block: 32x32, Threads: 8355840, Blue Time: 1.24 ms, Green Time: 0.88 ms, Red Time: 0.88 ms, Total Time: 2.99 ms
