@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
-
-#define N 6
+#define N 1024
 #define MAX_ITER 10000
-#define TOL 0.01
+#define TOL 0.015
 #define T_HOT2 540.0
 #define T_COLD 25.0
 #define WX 0.3
@@ -21,6 +21,7 @@ void boundary_conditions(double matrix_t[N][N]);
 
 int main(void) {
     int iter = 0;
+
     double diff = (T_HOT2-T_COLD);
     double (*matrix)[N] = malloc(N * N * sizeof(double));
     double (*matrix_t)[N] = malloc(N * N * sizeof(double));
@@ -35,7 +36,7 @@ int main(void) {
 
 
     printf("starting simulation...\n");
-
+    clock_t start = clock();  // start time
     while( (diff > TOL) && (iter < MAX_ITER)  ) {
 
         diff = diffusion_matrix_2(matrix,matrix_t);
@@ -47,18 +48,21 @@ int main(void) {
 
         }
         // each iteration we copy the internal border in the external one.
-        boundary_conditions(matrix_t);
-        
+
         copy_matrix(matrix,matrix_t);
         iter++;
 
     }
+
+    clock_t end = clock();    // stop time
+    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Elapsed time: %f seconds\n", elapsed);
     if (iter == MAX_ITER) {
         printf("Insufficient number of iterations\n");
     }
     else{ printf("Operation complete in %d iteration \n",iter); }
 
-    print_matrix(matrix);
+    // print_matrix(matrix);
 
     free(matrix);
     free(matrix_t);
@@ -103,7 +107,7 @@ double diffusion_matrix_2(double matrix[N][N],double matrix_t[N][N]) {
     for (int i = 1; i < N-1; i++) {
         for (int j = 1; j < N-1; j++) {
 
-            matrix_t[i][j] = (WY*(matrix[i-1][j] + matrix[i+1][j]) + WX*(matrix[i][j-1] + matrix[i][j+1]))/(2*(WX+WY));
+            matrix_t[i][j] = (WY*(matrix[i-1][j] + matrix[i+1][j]) + WX*(matrix[i][j-1] + matrix[i][j+1]));
 
             double diff = fabs(matrix_t[i][j]-matrix[i][j]);
             if ( diff > max_diff) {
@@ -131,4 +135,3 @@ void boundary_conditions(double matrix_t[N][N]) {
         matrix_t[N - 1][i] = matrix_t[N - 2][i];
     }
 }
-
