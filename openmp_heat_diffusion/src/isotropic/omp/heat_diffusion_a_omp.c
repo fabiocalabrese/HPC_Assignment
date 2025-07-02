@@ -22,60 +22,71 @@ double diffusion_matrix(double matrix[N][N],double matrix_t[N][N]);
 // for exercise 'a' we set the "Dirichlet boundary condition", so the border is fixed with initial condition.
 void boundary_conditions(double matrix[N][N], double matrix_2[N][N]);
 
-
 int main(void) {
 
-    int iter = 0;
+    
 
-    double diff = (T_HOT-T_COLD);
 
     // dynamic allocation of memory
     double (*matrix)[N] = malloc(N * N * sizeof(double));
     double (*matrix_t)[N] = malloc(N * N * sizeof(double));
-
+    int num_threads[] = {4, 6, 8, 10, 16, 20, 24,40, 48,60,80,96,100,128};
+    double times[16] = {};
     if (matrix == NULL || matrix_t == NULL) {
         printf("Error allocating memory for matrix\n");
         return -1;
     }
-
+    
+   int n = sizeof(num_threads) / sizeof(num_threads[0]);
 // initialization of the matrix and imposing the boundary condition
-    init_matrix(matrix);
+    for (int threads_number=0; threads_number < n; threads_number++){
+		//double ti = omp_get_wtime();
+               int  iter = 0;
+		double diff = (T_HOT-T_COLD);
+	  
+		omp_set_num_threads(num_threads[threads_number]);
+		init_matrix(matrix);
+		//double te = omp_get_wtime();
+		
+		boundary_conditions(matrix,matrix_t);
+		
+		printf("%d\n", num_threads[threads_number]);
+		
+		//printf("Starting simulation...");
+		
+		double  t_start = omp_get_wtime();
+		
+		while( (diff > TOL) && (iter < MAX_ITER)  ) {
 
-    boundary_conditions(matrix,matrix_t);
-    //omp_set_num_threads(6);
+	 //       print_matrix(matrix);
+			// apply the solver for each iteration
+			diff = diffusion_matrix(matrix,matrix_t);
+			
+		   
+			// just print every 100 some parameters
+			//if (iter % 100 == 0) {
+			//	printf("Iteration %d, Max Temperature Difference: %f\n",
+			//		   (iter+1), diff);
+			//	printf("temperature in the centre: %f\n", matrix[N/2][N/2]);
+			//printf("Temperature of the cell 600, 600:%f\n", matrix[600][600]);
+			//}
 
-    printf("Starting simulation...");
+			// copy the new matrix with the new values in the older one.
+			copy_matrix(matrix,matrix_t);
+			iter++;
 
-    double  t_start = omp_get_wtime();
-    while( (diff > TOL) && (iter < MAX_ITER)  ) {
+		}
+		double t_stop = omp_get_wtime();
 
-        // apply the solver for each iteration
-        diff = diffusion_matrix(matrix,matrix_t);
-
-
-        // just print every 100 some parameters
-        if (iter % 100 == 0) {
-            printf("Iteration %d, Max Temperature Difference: %f\n",
-                   (iter+1), diff);
-            printf("temperature in the centre: %f\n", matrix[N/2][N/2]);
-
-        }
-
-        // copy the new matrix with the new values in the older one.
-        copy_matrix(matrix,matrix_t);
-        iter++;
-
-    }
-    double t_stop = omp_get_wtime();
-
-    if (iter == MAX_ITER) {
-        printf("Insufficient number of iterations\n");
-    }
-    else{ printf("Simulation completed in %d iteration \n",iter);
-          printf("Time taken %2.f seconds\n",(t_stop - t_start));
-        }
-    // print_matrix(matrix);  // use this command just with N small (ex. 6)
-
+		//if (iter == MAX_ITER) {
+		//	printf("Insufficient number of iterations\n");
+		//}
+		//else{ printf("Simulation completed in %d iteration \n",iter); 
+		printf("%f\n",(t_stop - t_start));
+		//	}
+		// print_matrix(matrix);  // use this command just with N small (ex. 6)
+		//printf("time init:%.2f s",te-ti);
+	}
     // deallocate the memory
     free(matrix);
     free(matrix_t);
@@ -86,12 +97,11 @@ int main(void) {
 
 // half matrix at T_HOT and half at T_COLD
 void init_matrix(double matrix[N][N]) {
-
+   
     // we should ensure that i,j are updated in a secure way, independently one with the other
     int i,j;
-    double  t_start = omp_get_wtime();
     #pragma omp parallel for private(i,j) schedule(static,10)
-
+    
     for ( i = 0; i < N; i++) {
         for ( j = 0; j < N; j++) {
             if(j < N/2) {
@@ -102,9 +112,12 @@ void init_matrix(double matrix[N][N]) {
             }
         }
     }
-    double  t_end = omp_get_wtime();
-    printf("Time taken for initialization %2.f seconds\n",(t_end - t_start));
+   
 }
+
+
+
+
 
 void print_matrix(double matrix[N][N]) {
     for (int i = 0; i < N; i++) {
@@ -119,11 +132,11 @@ void print_matrix(double matrix[N][N]) {
 // apply the equation only for all the cells (but not the border)
 double diffusion_matrix(double matrix[N][N],double matrix_t[N][N]) {
     double max_diff = 0.0;
-
+   
    int i,j;
    // We must ensurre that the each thread maintains its copy of the maximum difference, then it will be compared--> reduction(max:)
    #pragma omp parallel for private(i,j) reduction(max:max_diff) schedule(dynamic,4)
-
+    
     for (i = 1; i < N-1; i++) {
         for (j = 1; j < N-1; j++) {
             double sum = matrix[i-1][j] + matrix[i+1][j] + matrix[i][j-1] + matrix[i][j+1];
@@ -134,7 +147,7 @@ double diffusion_matrix(double matrix[N][N],double matrix_t[N][N]) {
             }
         }
     }
-
+   
     return max_diff;
 }
 
@@ -142,15 +155,15 @@ double diffusion_matrix(double matrix[N][N],double matrix_t[N][N]) {
 
 void copy_matrix(double matrix[N][N], double matrix2[N][N]) {
 
-int i,j;
+int i,j;  
  #pragma omp parallel for private(i,j) schedule(static,10)
-
+    
     for (int i = 1; i < N-1; i++) {
         for (int j = 1; j < N-1; j++) {
             matrix[i][j] = matrix2[i][j];
         }
     }
-
+   
 }
 
 void boundary_conditions(double matrix[N][N], double matrix_2[N][N]) {
