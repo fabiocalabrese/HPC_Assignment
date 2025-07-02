@@ -34,7 +34,11 @@ On a machine embedded with a GPU (such as Mixto):
 
 "./launcher.sh"
 
-Make sure that the launcher is provided with the correct libraries such as OpenCV and the correct path of the images
+Make sure that the launcher is provided with the correct libraries such as OpenCV and the correct path of the images.
+
+----------------------------------------------------------------------------------------------------------------
+NOTE: the .sh file must be in the same folder of the file .cu you want to run or change the path in the .sh file
+----------------------------------------------------------------------------------------------------------------
 
 
 OUTPUT
