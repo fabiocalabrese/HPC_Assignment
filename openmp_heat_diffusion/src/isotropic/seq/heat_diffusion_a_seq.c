@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
+#include <malloc.h>
+#include <time.h>
 
 
-#define N 6
-#define MAX_ITER 1000
+#define N 1024
+#define MAX_ITER 10000
 #define TOL 0.01
 #define T_HOT 250.0
 #define T_COLD 25.0
@@ -26,7 +27,6 @@ int main(void) {
 
     int iter = 0;
 
-
     double diff = (T_HOT-T_COLD);
 
     // dynamic allocation of memory
@@ -41,11 +41,12 @@ int main(void) {
 // initialization of the matrix and imposing the boundary condition
     init_matrix(matrix);
 
-    print_matrix(matrix);
+    //boundary_conditions(matrix,matrix_t);
 
-    boundary_conditions(matrix,matrix_t);
 
-    printf("Starting simulation...");
+
+    printf("Starting simulation...\n");
+    clock_t start = clock();  // start time
 
     while( (diff > TOL) && (iter < MAX_ITER)  ) {
 
@@ -53,28 +54,28 @@ int main(void) {
         diff = diffusion_matrix(matrix,matrix_t);
 
         // just print every 100 some parameters
-        if (iter % 10 == 0) {
+       /* if (iter % 100 == 0) {
             printf("Iteration %d, Max Temperature Difference: %f\n",
                    (iter+1), diff);
-            //print_matrix(matrix);
-
             printf("temperature in the centre: %f\n", matrix[N/2][N/2]);
 
-        }
+        }*/
 
         // copy the new matrix with the new values in the older one.
         copy_matrix(matrix,matrix_t);
-        boundary_conditions(matrix,matrix_t);
-
         iter++;
 
     }
+    clock_t end = clock();    // stop time
+    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Elapsed time: %f seconds\n", elapsed);
+
     if (iter == MAX_ITER) {
         printf("Insufficient number of iterations\n");
     }
     else{ printf("Operation complete in %d iteration \n",iter); }
 
-    print_matrix(matrix);  // use this command just with N small (ex. 6)
+     //print_matrix(matrix);  // use this command just with N small (ex. 6)
 
     // deallocate the memory
     free(matrix);
