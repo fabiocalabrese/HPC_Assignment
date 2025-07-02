@@ -11,16 +11,16 @@ Project Directories:
 1. openmp_heat_diffusion/
    - Simulation of 2D heat diffusion using sequential and OpenMP implementations.
    - Includes both isotropic and anisotropic models.
-   - See openmp_heat_diffusion/README.md for more details.
+   - See openmp_heat_diffusion/README.txt for more details.
 
 2. cuda_filter/
    - CUDA implementation of a 2D image filter (e.g., blur, sharpen, edge detection).
-   - See cuda_filter/README.md for compilation and usage instructions.
+   - See cuda_filter/README.txt for compilation and usage instructions.
 
 3. mpi_matrix_mult/
    - MPI-based matrix multiplication using a systolic array approach.
    - Designed to run with multiple MPI processes.
-   - See mpi_matrix_mult/README.md for build and execution instructions.
+   - See mpi_matrix_mult/README.txt for build and execution instructions.
 
 General Notes:
 --------------
