@@ -23,6 +23,11 @@ If you are working with a normal PC: "gcc -fopenmp heat_diffusion_a.c -o heat
 SEQ FOLDER 
 -heat_diffusion_seq.c 
 
-To compile and run the program:
+To compile the program and create the executable:
 
 gcc heat_diffusion_seq.c -o heat
+
+To run
+
+./heat
+
