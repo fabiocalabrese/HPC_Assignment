@@ -12,6 +12,8 @@
 #define WY 0.2
 
 
+
+
 void init_matrix_2(double matrix[N][N]);
 void print_matrix(double matrix[N][N]);
 void copy_matrix(double matrix[N][N], double matrix2[N][N]);
@@ -20,49 +22,58 @@ void boundary_conditions(double matrix_t[N][N]);
 
 
 int main(void) {
-    int iter = 0;
-    double diff = (T_HOT2-T_COLD);
+   
     double (*matrix)[N] = malloc(N * N * sizeof(double));
     double (*matrix_t)[N] = malloc(N * N * sizeof(double));
+    double times[16] = {};
+    int num_threads[] = {4, 6, 8, 10, 16, 20, 24,40, 48,60,80,96,100,128};
+     int n = sizeof(num_threads) / sizeof(num_threads[0]);
 
-    if (matrix == NULL || matrix_t == NULL) {
+
+		if (matrix == NULL || matrix_t == NULL) {
         printf("Error allocating memory for matrix\n");
         return -1;
     }
-
-    //omp_set_num_threads();
-    init_matrix_2(matrix);
-
-
-    printf("starting simulation...\n");
-   double  t_start = omp_get_wtime();
-    while( (diff > TOL) && (iter < MAX_ITER)  ) {
-
-        diff = diffusion_matrix_2(matrix,matrix_t);
-
-        if (iter % 100 == 0) {
-            printf("Iteration %d, Max Temperature Difference: %f\n",
-                   (iter+1), diff);
-            printf("temperature in the centre: %f\n", matrix[N/2][N/2]);
-
-        }
-
-        // each iteration we copy the internal border in the external one.
-        copy_matrix(matrix,matrix_t);
-        iter++;
-
-    }
-    printf("\n");
-    double t_stop = omp_get_wtime();
+	for (int threads_number = 0;threads_number < n;threads_number++){
+		
+		int iter =0;		
+		double diff = (T_HOT2-T_COLD);
+		omp_set_num_threads(num_threads[threads_number]);
+		printf("%d\n",num_threads[threads_number]);
+		init_matrix_2(matrix);
 
 
-    printf("Time elapsed:%.2f\n",t_stop-t_start);
-    if (iter == MAX_ITER) {
-        printf("Insufficient number of iterations\n");
-    }
-    else{ printf("Simulation completed in %d iteration \n",iter); }
+		//printf("starting simulation...\n");
+		double  t_start = omp_get_wtime();
+		while( (diff > TOL) && (iter < MAX_ITER)  ) {
 
-    // print_matrix(matrix);
+			diff = diffusion_matrix_2(matrix,matrix_t);
+
+			//if (iter % 100 == 0) {
+			    //printf("Iteration %d, Max Temperature Difference: %f\n",
+			    //       (iter+1), diff);
+			    //printf("temperature in the centre: %f\n", matrix[N/2][N/2]);
+				//print_matrix(matrix);
+			//}
+
+			// each iteration we copy the internal border in the external one.
+			copy_matrix(matrix,matrix_t);
+			iter++;
+
+		}
+		//printf("\n");
+		double t_stop = omp_get_wtime();
+
+		times[threads_number]=t_stop-t_start;
+		printf("%f\n",times[threads_number]);
+		
+		//if (iter == MAX_ITER) {
+		//    printf("Insufficient number of iterations\n");
+		//}
+		//else{ printf("Simulation completed in %d iteration \n",iter); }
+
+		// print_matrix(matrix);
+	}
 
     free(matrix);
     free(matrix_t);
@@ -93,7 +104,7 @@ void init_matrix_2(double matrix[N][N]) {
 
 
 void print_matrix(double matrix[N][N]) {
-
+    
     for ( int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             printf("%f\t", matrix[i][j]);
