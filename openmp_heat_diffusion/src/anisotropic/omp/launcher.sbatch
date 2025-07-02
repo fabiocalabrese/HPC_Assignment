@@ -27,5 +27,5 @@ export OMP_NUM_THREADS=24
 gcc -fopenmp heat_diffusion_b_omp.c -o heat_a
 
 # Esegui il programma
-./heat_a
+./heat_b
 
