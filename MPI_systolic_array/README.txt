@@ -6,18 +6,18 @@ This directory contains the implementation of the systolic array matrix multipli
 Structure:
 ----------
 
-Inside 'src/' there are two folders:
+- 'src/' 
 
-- 'sequential/':  contains the traditional matrix multiplication
+	- 'sequential/':  contains the traditional matrix multiplication
 
 
-- 'MPI_implemented/': 
+	- 'MPI_implemented/': 
 
-	- contains three .c files, one for each matrix size. 
-	The files are named in 	this way "systolic_array_{Matrix size}.c".
+		- contains three .c files, one for each matrix size. 
+		The files are named in 	this way "systolic_array_{Matrix size}.c".
 
-	- 'sbatch/': contains .sbatch files to compile and execute the MPI codes.
-	The files are named in this way "run_N{Number of nodes}_{Number of processes}proc_{Matrix size}
+		- 'sbatch/': contains .sbatch files to compile and execute the MPI codes.
+		The files are named as "run_N{Number of nodes}_{Number of processes}proc_{Matrix size}
 
 - 'input/': contains the input matrices of different sizes and a python code to generate them
 
@@ -27,7 +27,7 @@ Inside 'src/' there are two folders:
 COMPILE and RUN
 ---------------
 
-The MPI program in a cluster:
+On a cluster: 
 
 "sbatch {sbatch filename}"
 

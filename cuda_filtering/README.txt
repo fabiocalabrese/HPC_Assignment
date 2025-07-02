@@ -10,7 +10,7 @@ Structure:
 	- 'cuda/',  with 4 files:
 		- "filter_cuda.cu": compute the output images with the applied filter
 		- "filter_cuda_time_computation.cu": compute the execution time for all block dimensions
-		- "filter_debug.cu": code used to check arbitrary values (single pixel) of the image. It prints the 		selected interval and the times related to each channel
+		- "filter_debug.cu": code used to check arbitrary values (single pixel) of the image. It prints th		selected interval and the times related to each channel
 		- "launcher.sh": used to compile and run the selected code given the correct path of the image
 
 	- 'seq' contains the sequential implementation of the filter together the launcher
