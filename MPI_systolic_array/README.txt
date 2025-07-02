@@ -8,7 +8,7 @@ Structure:
 
 - 'src/' 
 
-	- 'sequential/':  contains the traditional matrix multiplication
+	- 'sequential/':  contains the traditional matrix multiplication. If you want to run it, 		make sure that the parameter N referring to the matrix dimension coincides with 		the matrix in the input file and do the same for the input file names.
 
 
 	- 'MPI_implemented/': 
