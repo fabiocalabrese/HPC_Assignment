@@ -31,6 +31,9 @@ On a cluster:
 
 "sbatch {sbatch filename}"
 
+------------------------------------------------------------------------------------------------
+NOTE: Make sure that the input matrices, the .c program and the .sbatch file are in the same folder. In this repository they are in different folders just to have a better organization of the files. Alternatively, you can just adjust the path in the .c and .sbatch files.
+------------------------------------------------------------------------------------------------
 
 
 OUTPUT
