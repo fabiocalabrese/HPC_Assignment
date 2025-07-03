@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 	int rank, size;
 	double start_time, end_time, elapsed_time;
 	
-	if (argc < 4) {
+	if (argc < 5) {
 		if (rank == 0) {
 			printf("Missing input data\n", argv[0]);
 		}
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]){
 		end_time = MPI_Wtime();
 		elapsed_time = end_time - start_time;
 
-		FILE *fp = fopen(argv[3], "w"); 
+		FILE *fp = fopen(argv[4], "w"); 
 		if (fp) {
 			fprintf(fp, "%d,%.6f\n", size, elapsed_time);
 			fclose(fp);
