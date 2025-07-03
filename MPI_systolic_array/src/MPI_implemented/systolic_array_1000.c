@@ -148,7 +148,7 @@ int main(int argc, char *argv[]){
 	                C_block[i * block_size + j] += sum;
 	            }
 		}
-	}
+	
 	
         double *tmp_A = malloc(block_size * block_size * sizeof(double));
 	double *tmp_B = malloc(block_size * block_size * sizeof(double));
