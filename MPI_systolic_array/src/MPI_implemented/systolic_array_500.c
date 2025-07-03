@@ -4,7 +4,9 @@
 #include <math.h>
 #include <string.h>
 
-#define N 500 //Definition of the size of the column/row of the matrix
+//Definition of the size of the column/row of the matrix
+#define N 500 
+
 
 //Definition of the functions to read the matrices from the .csv files and write the output matrix
 void read_matrix_from_csv();
@@ -22,7 +24,7 @@ int main(int argc, char *argv[]){
 	//If there are not all the input arguments close process
 	if (argc < 5) {
 		if (rank == 0) {
-			printf("Uso: %s <fileA.csv> <fileB.csv> <fileC.csv>\n", argv[0]);
+			printf("Missing inputs\n", argv[0]);
 		} 
 		return 1;
 	}
@@ -292,7 +294,7 @@ int main(int argc, char *argv[]){
 			fprintf(fp, "%d,%.6f\n", size, elapsed_time);
 			fclose(fp);
 		} else {
-			perror("Errore apertura file timing");
+			perror("Error openening time file");
 		}
 	}
 	
@@ -305,7 +307,7 @@ int main(int argc, char *argv[]){
 void read_matrix_from_csv(const char *filename, double *matrix, int n) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
-        perror("Errore apertura file");
+        perror("Error opening input matrix file");
         exit(1);
     }
 
@@ -313,7 +315,7 @@ void read_matrix_from_csv(const char *filename, double *matrix, int n) {
         for (int j = 0; j < n; j++) {
             int result = fscanf(fp, "%lf,", &matrix[i*n + j]);
             if (result != 1) {
-                fprintf(stderr, "Errore lettura elemento [%d,%d]\n", i, j);
+                fprintf(stderr, "Error reading element [%d,%d]\n", i, j);
                 fclose(fp);
                 exit(1);
             }
@@ -327,7 +329,7 @@ void read_matrix_from_csv(const char *filename, double *matrix, int n) {
 void write_matrix_to_csv(const char *filename, double *matrix, int n) {
     FILE *fp = fopen(filename, "w");
     if (!fp) {
-        perror("Errore apertura file");
+        perror("Error opening output matrix file");
         exit(1);
     }
     for (int i = 0; i < n; i++) {
