@@ -7,7 +7,7 @@
 #define N 1000
 
 void read_matrix_from_csv();
-//void write_matrix_to_csv();
+void write_matrix_to_csv();
 
 
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 	
 	if (argc < 4) {
 		if (rank == 0) {
-			printf("Uso: %s <fileA.csv> <fileB.csv> <fileC.csv>\n", argv[0]);
+			printf("Missing input data\n", argv[0]);
 		}
 		MPI_Finalize();
 		return 1;
@@ -84,12 +84,12 @@ int main(int argc, char *argv[]){
 	
 	MPI_Datatype blocktype1, blocktype2;
 	MPI_Type_vector(block_size, block_size, N, MPI_DOUBLE, &blocktype1);	
-	MPI_Type_create_resized(blocktype1, 0, sizeof(double), &blocktype2);//----------------AAAAAAAAAAAAAAAAAA
+	MPI_Type_create_resized(blocktype1, 0, sizeof(double), &blocktype2);
 	MPI_Type_commit(&blocktype2);	
 	
 	
 	MPI_Scatterv(A, counts, displs, blocktype2, A_block, block_size * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Scatterv(B, counts, displs, blocktype2, B_block, block_size * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    	MPI_Scatterv(B, counts, displs, blocktype2, B_block, block_size * block_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 	
 	
@@ -104,11 +104,11 @@ int main(int argc, char *argv[]){
     int my_col = coords[1];
 	
 	int left, right, up, down;
-    MPI_Cart_shift(grid_comm, 1, -1, &right, &left); // shift sulle colonne
-    MPI_Cart_shift(grid_comm, 0, -1, &down, &up);    // shift sulle righe
+    MPI_Cart_shift(grid_comm, 1, -1, &right, &left); 
+    MPI_Cart_shift(grid_comm, 0, -1, &down, &up);    
 	
 	
-	//Allineamento iniziale (prima riga e prima colonna), ognuno deve avere il blocco giusto per iniziare moltiplicazione
+	
 	double *tmp_block = malloc(block_size * block_size * sizeof(double));
 	for (int i = 0; i < my_row; i++) {
     MPI_Status status;
@@ -135,25 +135,25 @@ int main(int argc, char *argv[]){
     memcpy(B_block, tmp_block, block_size*block_size*sizeof(double));
 	}
 	free(tmp_block);
-	//MPI_Sendrecv_replace() --> up: destinatario, down: mittente
 	
-	//Algoritmo di Cannon
+	
+	
 	for (int k = 0; k < p; k++) {
-        //
-        for (int i = 0; i < block_size; i++) {
-            for (int j = 0; j < block_size; j++) {
-                double sum = 0.0;
-                for (int l = 0; l < block_size; l++) {
-                    sum += A_block[i * block_size + l] * B_block[l * block_size + j];
-                }
-                C_block[i * block_size + j] += sum;
-            }
-        }
-	 // Shift A a sinista, B in alto
+	        for (int i = 0; i < block_size; i++) {
+	            for (int j = 0; j < block_size; j++) {
+	                double sum = 0.0;
+	                for (int l = 0; l < block_size; l++) {
+	                    sum += A_block[i * block_size + l] * B_block[l * block_size + j];
+	                }
+	                C_block[i * block_size + j] += sum;
+	            }
+		}
+	}
+	
         double *tmp_A = malloc(block_size * block_size * sizeof(double));
-		double *tmp_B = malloc(block_size * block_size * sizeof(double));
+	double *tmp_B = malloc(block_size * block_size * sizeof(double));
 
-		// Shift A a sinistra
+		
 		MPI_Status statusA;
 		if ((my_col+my_row) % 2 == 0) {
 			MPI_Send(A_block, block_size*block_size, MPI_DOUBLE, left, 0, grid_comm);
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]){
 			MPI_Send(A_block, block_size*block_size, MPI_DOUBLE, left, 0, grid_comm);
 			}
 		memcpy(A_block, tmp_A, block_size*block_size*sizeof(double));
-		// Shift B in alto
+	
 		MPI_Status statusB;
 		if ((my_col+my_row) % 2 == 0) {
 			MPI_Send(B_block, block_size*block_size, MPI_DOUBLE, up, 0, grid_comm);
@@ -179,25 +179,13 @@ int main(int argc, char *argv[]){
 		free(tmp_A);
 		free(tmp_B);
     }
-//	for (int r = 0; r < size; r++) {
-//    if (rank == r) {
-//        printf("Rank %d, C_block:\n", rank);
-//        for (int i = 0; i < block_size; i++) {
-//            for (int j = 0; j < block_size; j++) {
-//                printf("%8.1f ", C_block[i*block_size+j]);
-//				}
-//            printf("\n");
-//			}
-//        fflush(stdout);
-//		}
-//    MPI_Barrier(MPI_COMM_WORLD);
-//	}
+
 	
 	MPI_Gatherv(C_block, block_size * block_size, MPI_DOUBLE, C, counts, displs, blocktype2, 0, MPI_COMM_WORLD);
 
-//	if (rank == 0) {
-//		write_matrix_to_csv(argv[3], C, N);
-//	}
+	if (rank == 0) {
+		write_matrix_to_csv(argv[3], C, N);
+	}
 	
 	
     free(A_block); free(B_block); free(C_block);
@@ -209,12 +197,12 @@ int main(int argc, char *argv[]){
 		end_time = MPI_Wtime();
 		elapsed_time = end_time - start_time;
 
-		FILE *fp = fopen(argv[3], "w"); // "a" per aggiungere, "w" per sovrascrivere
+		FILE *fp = fopen(argv[3], "w"); 
 		if (fp) {
 			fprintf(fp, "%d,%.6f\n", size, elapsed_time);
 			fclose(fp);
 		} else {
-			perror("Errore apertura file timing");
+			perror("Error in opening time file");
 		}
 	}
 	
@@ -226,7 +214,7 @@ int main(int argc, char *argv[]){
 void read_matrix_from_csv(const char *filename, double *matrix, int n) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
-        perror("Errore apertura file");
+        perror("Error in opening input matrix file");
         exit(1);
     }
 
@@ -234,7 +222,7 @@ void read_matrix_from_csv(const char *filename, double *matrix, int n) {
         for (int j = 0; j < n; j++) {
             int result = fscanf(fp, "%lf,", &matrix[i*n + j]);
             if (result != 1) {
-                fprintf(stderr, "Errore lettura elemento [%d,%d]\n", i, j);
+                fprintf(stderr, "Error in element reading [%d,%d]\n", i, j);
                 fclose(fp);
                 exit(1);
             }
@@ -244,18 +232,18 @@ void read_matrix_from_csv(const char *filename, double *matrix, int n) {
     fclose(fp);
 }
 
-//void write_matrix_to_csv(const char *filename, double *matrix, int n) {
-//    FILE *fp = fopen(filename, "w");
-//    if (!fp) {
-//        perror("Errore apertura file");
-//        exit(1);
-//    }
-//    for (int i = 0; i < n; i++) {
-//        for (int j = 0; j < n; j++) {
-//            fprintf(fp, "%.6f", matrix[i*n + j]);
-//            if (j < n-1) fprintf(fp, ",");
-//        }
-//        fprintf(fp, "\n");
-//    }
-//    fclose(fp);
-//}
+void write_matrix_to_csv(const char *filename, double *matrix, int n) {
+    FILE *fp = fopen(filename, "w");
+    if (!fp) {
+        perror("Error in opening output matrix file");
+        exit(1);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            fprintf(fp, "%.6f", matrix[i*n + j]);
+            if (j < n-1) fprintf(fp, ",");
+        }
+        fprintf(fp, "\n");
+    }
+    fclose(fp);
+}
