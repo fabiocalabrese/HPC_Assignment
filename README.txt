@@ -28,7 +28,10 @@ General Notes:
 - SLURM launcher scripts are included where needed for HPC environments.
 - Source code is written in C or CUDA C, and can be compiled using gcc, nvcc, or mpicc as appropriate.
 
-Author:
+Authors:
 -------
-s343467@studenti.polito.it
+Carlo Mattioli - s349351@studenti.polito.it
+Fabio Calabrese - s343467@studenti.polito.it
+Michele Merla - s343500@studenti.polito.it
+
 Politecnico di Torino – High Performance Computing Assignment
