@@ -35,3 +35,6 @@ Fabio Calabrese - s343467@studenti.polito.it
 Michele Merla - s343500@studenti.polito.it
 
 Politecnico di Torino – High Performance Computing Assignment
+
+> **Disclaimer:** The contribution statistics automatically displayed by GitHub do not accurately reflect the real distribution of work among contributors. The project was developed collaboratively, with significant input from all team members.
+
